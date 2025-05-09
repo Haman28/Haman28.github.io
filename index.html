@@ -6,95 +6,126 @@
   <title>My Portfolio</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
-    /* Sidebar styles */
+  
+  .fade-slide {
+    opacity: 0;
+    transform: translateX(-20px) translateY(20px);
+    transition: all 0.8s ease-out;
+  }
+
+  .fade-slide.slide-right {
+    transform: translateX(20px) translateY(20px);
+  }
+
+  .fade-slide.slide-up {
+    transform: translateX(0) translateY(30px);
+  }
+
+  .fade-slide.visible {
+    opacity: 1;
+    transform: translateX(0) translateY(0);
+  }
+
     #mobile-sidebar {
       transform: translateX(100%);
       transition: transform 0.3s ease-out;
-      background-color: black;
+      background-color: darkred;
       color: white;
       position: fixed;
       top: 0;
-      left: 0;
-      width: 100%;
+      right: 0;
+      width: 80%;
+      max-width: 300px;
       height: 100%;
-      pointer-events: none;
-      background: 
-        radial-gradient(circle at 50% 50%, rgba(255
-        ,255
-        ,255
-        ,0.3) 0%, transparent 50%),
-
-        radial-gradient(circle at 80% 70%, rgba(255,255
-        ,00,0.8) 30%, transparent 80%),
-        radial-gradient(circle at 40% 60%, rgba(100, 255
-        , 0, 0.9) 0%, transparent 20%),
-        radial-gradient(circle at 60% 20%, rgba(5, 0, 0, 0.9) 100%, transparent 100%);
-      filter: url(#red-splatter);
-      mix-blend-mode: multiply;
+      z-index: 40;
+      backdrop-filter: blur(10px);
     }
+    
     #mobile-sidebar.open {
       transform: translateX(0);
-      pointer-events: all;
     }
+    
     /* Overlay for when sidebar is open */
     #overlay {
       opacity: 0;
       pointer-events: none;
       transition: opacity 0.3s ease;
+      z-index: 30;
     }
+    
     #overlay.active {
-      opacity: 0.5;
+      opacity: 1;
       pointer-events: all;
+    }
+    
+    /* Image container with better mobile handling */
+    .profile-image-container {
+      border-radius: 20% / 30%;
+      border: 2px solid black;
+      overflow: hidden;
+      margin: 0 auto;
+      width: 200px;
+      height: 250px;
+    }
+    
+    @media (min-width: 768px) {
+      .profile-image-container {
+        width: 240px;
+        height: 300px;
+      }
+    }
+    
+    @media (min-width: 1024px) {
+      .profile-image-container {
+        width: 280px;
+        height: 350px;
+      }
     }
   </style>
 </head>
 <body class="min-h-screen bg-[linear-gradient(100deg,black_10%,#900_90%)]">
-  <div id="overlay" class="fixed inset-0 bg-black z-20"></div>
+  <div id="overlay" class="fixed inset-0 bg-black z-30"></div>
 
-  <nav class="bg-[linear-gradient(100deg,black_10%,#900_90%)]">
+  <nav class="bg-[linear-gradient(100deg,black_10%,#900_90%)] sticky top-0 z-20">
     <div class="container mx-auto px-4 sm:px-6 py-4 flex justify-between items-center">
       <div class="hidden md:flex space-x-6 lg:space-x-8 text-white">
-        <a href="#about" class="hover:text-indigo-300 transition-colors">
-            About
-        </a>
+        <a href="#about" class="hover:text-indigo-300 transition-colors">About</a>
         <a href="#projects" class="hover:text-indigo-300 transition-colors">Projects</a>
         <a href="#skills" class="hover:text-indigo-300 transition-colors">Skills</a>
-        <a href="#contact" class="hover:text-indigo-300 transition-colors">
-            Contact
-        </a>
+        <a href="#contact" class="hover:text-indigo-300 transition-colors">Contact</a>
       </div>
-      <button onclick="toggleSidebar()" class="md:hidden text-2xl text-white focus:outline-none">
+      <button onclick="toggleSidebar()" class="md:hidden text-2xl text-white focus:outline-none z-50">
         ☰
       </button>
     </div>
   </nav>
 
   <!-- Mobile Sidebar -->
-  <div id="mobile-sidebar" class="fixed top-0 right-0 h-full w-3/4 sm:w-64 bg-gray-900 shadow-lg z-30 p-4">
-    <button onclick="toggleSidebar()" class="text-2xl mb-8 text-white focus:outline-none">×</button>
-    <div class="flex flex-col space-y-6">
-      <a href="#about" onclick="toggleSidebar()" class="text-lg text-white hover:text-red-400 transition-colors">About</a>
-      <a href="#projects" onclick="toggleSidebar()" class="text-lg text-white hover:text-red-400 transition-colors">Projects</a>
-      <a href="#skills" onclick="toggleSidebar()" class="text-lg text-white hover:text-red-400 transition-colors">Skills</a>
-      <a href="#contact" onclick="toggleSidebar()" class="text-lg text-white hover:text-red-400 transition-colors">Contact</a>
+  <div id="mobile-sidebar" class="fixed top-0 right-0 h-full shadow-lg p-6">
+    <button onclick="toggleSidebar()" class="text-3xl mb-8 text-white focus:outline-none absolute top-4 right-4">×</button>
+    <div class="flex flex-col space-y-6 mt-12">
+      <a href="#about" onclick="toggleSidebar()" class="text-xl text-white hover:text-red-400 transition-colors">About</a>
+      <a href="#projects" onclick="toggleSidebar()" class="text-xl text-white hover:text-red-400 transition-colors">Projects</a>
+      <a href="#skills" onclick="toggleSidebar()" class="text-xl text-white hover:text-red-400 transition-colors">Skills</a>
+      <a href="#contact" onclick="toggleSidebar()" class="text-xl text-white hover:text-red-400 transition-colors">Contact</a>
     </div>
   </div>
 
   <!-- Hero Section -->
-  <header class="container mx-auto px-4 sm:px-6 py-12 md:py-20">
-    <div class="max-w-6xl mx-auto flex flex-col md:flex-row items-start justify-between">
-      <div class="flex-1 md:pr-8">
-        <h1 class="font-bold mb-4 text-white text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl ml-0 sm:ml-8 md:ml-12 mt-8 md:mt-12">
+  <header class="sm:px-6 py-12 md:py-20  slide-diagonal container mx-auto px-4 fade-slide slide-up">
+    <div class="max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between">
+      <div class="flex-1 md:pr-8 order-2 md:order-1">
+        <h1 class="font-bold mb-4 text-white text-4xl sm:text-5xl md:text-6xl lg:text-7xl mt-8 md:mt-12 text-center md:text-left">
           Hana Solomon
         </h1>
-        <p class="text-gray-300 mb-6 text-2xl sm:text-3xl md:text-4xl ml-0 sm:ml-8 md:ml-12">
+        <p class="text-gray-300 mb-6 text-2xl sm:text-3xl md:text-4xl text-center md:text-left">
           I build things for the web
         </p>
-        <p class="text-gray-400 max-w-2xl text-base sm:text-lg md:text-xl mb-8 ml-0 sm:ml-8 md:ml-12">
+        <p class="text-gray-400 max-w-2xl text-base sm:text-lg md:text-xl mb-8 text-center md:text-left">
           I'm a Web developer specializing in building exceptional digital experiences.<br> 
           Currently focused on building accessible, human-centered products.
         </p>
-        <div class="flex flex-col sm:flex-row items-start sm:items-center gap-4 ml-0 sm:ml-8 md:ml-12">
+        <div class="flex flex-col sm:flex-row items-center justify-center md:justify-start gap-4">
           <button class="bg-black hover:bg-gray-700 text-white font-bold py-2 px-4 sm:py-3 sm:px-6 rounded flex items-center gap-2 transition-colors">
             Projects <img src="arrow-right - Copy.svg" class="filter invert brightness-0 h-4 w-4" alt="White arrow">
           </button>
@@ -104,17 +135,16 @@
         </div>
       </div>
       
-      <!-- Image container -->
-      <div class="hidden md:block mt-10 md:mt-0 md:ml-8 lg:ml-12">
-        <div class="w-48 h-60 sm:w-56 sm:h-72 md:w-64 md:h-80 lg:w-72 lg:h-88 overflow-hidden mt-8 md:mt-12" 
-             style="border-radius: 50% / 30%; border: 2px solid black;">
+      <!-- Image container - now visible on mobile -->
+      <div class="order-1 md:order-2 mt-8 md:mt-0 md:ml-8 lg:ml-12 w-full md:w-auto flex justify-center">
+        <div class="profile-image-container">
           <img src="hann.jpg" alt="Hana Solomon" class="w-full h-full object-cover" style="object-position: center 30%;">
         </div>
       </div>
     </div>
   </header>
 
-  <section id="about" class="container mx-auto px-4 sm:px-6 py-12 md:py-16">
+  <section id="about" class="container mx-auto px-4 sm:px-6 py-12 md:py-16 fade-slide slide-right">
     <div class="relative max-w-md mx-auto text-center mb-8 md:mb-12">
       <h2 class="text-2xl sm:text-3xl font-bold text-gray-300 inline-block relative">
         01. About Me
@@ -178,157 +208,280 @@
       </h2>
     </div>
   
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
-      <div class="group relative overflow-hidden rounded-xl bg-gradient-to-br from-black to-gray-900 p-6 border border-gray-800 hover:bg-gray-200 
-       transition-all duration-300">
-        <div class="absolute inset-0 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-red-900/10 via-transparent to-transparent opacity-0 group-hover:bg-black-red
-         transition-opacity duration-500"></div>
-        <div class="relative z-10">
-          <div class="flex items-center mb-4 sm:mb-6">
-            <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-red-900/20 flex items-center justify-center mr-3 sm:mr-4 group-hover:bg-gray-200
-             transition-colors">
-              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 sm:h-6 sm:w-6 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-              </svg>
-            </div>
-            <h3 class="text-xl sm:text-2xl font-semibold text-white">Frontend</h3>
-          </div>
-          <ul class="space-y-2 sm:space-y-3">
-            <li class="flex items-start">
-              <span class="text-red-500 mr-2 sm:mr-3 mt-1">▹</span>
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto fade-slide slide-up">
+  
+    <!-- Frontend Card with Percentage Bars -->
+<div class="group relative overflow-hidden rounded-xl bg-gradient-to-br from-black to-gray-900 p-6 border border-gray-800 hover:border-red-500/50 transition-all duration-300">
+    <div class="absolute inset-0 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-red-900/10 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+    <div class="relative z-10">
+      <div class="flex items-center mb-4 sm:mb-6">
+        <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-red-900/20 flex items-center justify-center mr-3 sm:mr-4 group-hover:bg-gray-200 transition-colors">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 sm:h-6 sm:w-6 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+          </svg>
+        </div>
+        <h3 class="text-xl sm:text-2xl font-semibold text-white">Frontend</h3>
+      </div>
+      <ul class="space-y-3 sm:space-y-4">
+        <li class="flex flex-col">
+          <div class="flex justify-between items-center mb-1">
+            <div class="flex items-center">
+              <span class="text-red-500 mr-2 sm:mr-3">▹</span>
               <span class="text-sm sm:text-base text-gray-300 group-hover:text-white transition-colors">React.js / Next.js</span>
-            </li>
-            <li class="flex items-start">
-              <span class="text-red-500 mr-2 sm:mr-3 mt-1">▹</span>
+            </div>
+            <span class="text-xs text-gray-400">90%</span>
+          </div>
+          <div class="w-full h-1.5 bg-gray-800 rounded-full ml-5">
+            <div class="h-full bg-gradient-to-r from-red-500 to-red-400 rounded-full" style="width: 90%"></div>
+          </div>
+        </li>
+        <li class="flex flex-col">
+          <div class="flex justify-between items-center mb-1">
+            <div class="flex items-center">
+              <span class="text-red-500 mr-2 sm:mr-3">▹</span>
               <span class="text-sm sm:text-base text-gray-300 group-hover:text-white transition-colors">JavaScript (ES6+) / TypeScript</span>
-            </li>
-            <li class="flex items-start">
-              <span class="text-red-500 mr-2 sm:mr-3 mt-1">▹</span>
+            </div>
+            <span class="text-xs text-gray-400">85%</span>
+          </div>
+          <div class="w-full h-1.5 bg-gray-800 rounded-full ml-5">
+            <div class="h-full bg-gradient-to-r from-red-500 to-red-400 rounded-full" style="width: 85%"></div>
+          </div>
+        </li>
+        <li class="flex flex-col">
+          <div class="flex justify-between items-center mb-1">
+            <div class="flex items-center">
+              <span class="text-red-500 mr-2 sm:mr-3">▹</span>
               <span class="text-sm sm:text-base text-gray-300 group-hover:text-white transition-colors">Tailwind CSS / Sass</span>
-            </li>
-            <li class="flex items-start">
-              <span class="text-red-500 mr-2 sm:mr-3 mt-1">▹</span>
+            </div>
+            <span class="text-xs text-gray-400">80%</span>
+          </div>
+          <div class="w-full h-1.5 bg-gray-800 rounded-full ml-5">
+            <div class="h-full bg-gradient-to-r from-red-500 to-red-400 rounded-full" style="width: 80%"></div>
+          </div>
+        </li>
+        <li class="flex flex-col">
+          <div class="flex justify-between items-center mb-1">
+            <div class="flex items-center">
+              <span class="text-red-500 mr-2 sm:mr-3">▹</span>
               <span class="text-sm sm:text-base text-gray-300 group-hover:text-white transition-colors">Three.js / WebGL</span>
-            </li>
-            <li class="flex items-start">
-              <span class="text-red-500 mr-2 sm:mr-3 mt-1">▹</span>
+            </div>
+            <span class="text-xs text-gray-400">65%</span>
+          </div>
+          <div class="w-full h-1.5 bg-gray-800 rounded-full ml-5">
+            <div class="h-full bg-gradient-to-r from-red-500 to-red-400 rounded-full" style="width: 65%"></div>
+          </div>
+        </li>
+        <li class="flex flex-col">
+          <div class="flex justify-between items-center mb-1">
+            <div class="flex items-center">
+              <span class="text-red-500 mr-2 sm:mr-3">▹</span>
               <span class="text-sm sm:text-base text-gray-300 group-hover:text-white transition-colors">Responsive & Adaptive Design</span>
-            </li>
-          </ul>
-          <div class="mt-4 sm:mt-6 flex flex-wrap gap-2">
-            <span class="px-2 py-1 sm:px-3 sm:py-1 bg-red-900/20 text-red-400 rounded-full text-xs sm:text-sm">React</span>
-            <span class="px-2 py-1 sm:px-3 sm:py-1 bg-red-900/20 text-red-400 rounded-full text-xs sm:text-sm">Next.js</span>
-            <span class="px-2 py-1 sm:px-3 sm:py-1 bg-red-900/20 text-red-400 rounded-full text-xs sm:text-sm">TypeScript</span>
-          </div>
-        </div>
-      </div>
-  
-      <!-- Backend Card -->
-      <div class="group relative overflow-hidden rounded-xl bg-gradient-to-br from-black to-gray-900 p-6 border border-gray-800 hover:border-red-500/50 transition-all duration-300">
-        <div class="absolute inset-0 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-red-900/10 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-        <div class="relative z-10">
-          <div class="flex items-center mb-4 sm:mb-6">
-            <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-red-900/20 flex items-center justify-center mr-3 sm:mr-4 group-hover:bg-gray-200
-             transition-colors">
-              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 sm:h-6 sm:w-6 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h14M5 12a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v4a2 2 0 01-2 2M5 12a2 2 0 00-2 2v4a2 2 0 002 2h14a2 2 0 002-2v-4a2 2 0 00-2-2m-2-4h.01M17 16h.01" />
-              </svg>
             </div>
-            <h3 class="text-xl sm:text-2xl font-semibold text-white">Backend</h3>
+            <span class="text-xs text-gray-400">95%</span>
           </div>
-          <ul class="space-y-2 sm:space-y-3">
-            <li class="flex items-start">
-              <span class="text-red-500 mr-2 sm:mr-3 mt-1">▹</span>
-              <span class="text-sm sm:text-base text-gray-300 group-hover:text-white transition-colors">Node.js / Express.js</span>
-            </li>
-            <li class="flex items-start">
-              <span class="text-red-500 mr-2 sm:mr-3 mt-1">▹</span>
-              <span class="text-sm sm:text-base text-gray-300 group-hover:text-white transition-colors">RESTful & GraphQL APIs</span>
-            </li>
-            <li class="flex items-start">
-              <span class="text-red-500 mr-2 sm:mr-3 mt-1">▹</span>
-              <span class="text-sm sm:text-base text-gray-300 group-hover:text-white transition-colors">Authentication (JWT, OAuth)</span>
-            </li>
-            <li class="flex items-start">
-              <span class="text-red-500 mr-2 sm:mr-3 mt-1">▹</span>
-              <span class="text-sm sm:text-base text-gray-300 group-hover:text-white transition-colors">Python / Django</span>
-            </li>
-            <li class="flex items-start">
-              <span class="text-red-500 mr-2 sm:mr-3 mt-1">▹</span>
-              <span class="text-sm sm:text-base text-gray-300 group-hover:text-white transition-colors">Server Deployment & CI/CD</span>
-            </li>
-          </ul>
-          <div class="mt-4 sm:mt-6 flex flex-wrap gap-2">
-            <span class="px-2 py-1 sm:px-3 sm:py-1 bg-red-900/20 text-red-400 rounded-full text-xs sm:text-sm">Node.js</span>
-            <span class="px-2 py-1 sm:px-3 sm:py-1 bg-red-900/20 text-red-400 rounded-full text-xs sm:text-sm">Express</span>
-            <span class="px-2 py-1 sm:px-3 sm:py-1 bg-red-900/20 text-red-400 rounded-full text-xs sm:text-sm">Python</span>
+          <div class="w-full h-1.5 bg-gray-800 rounded-full ml-5">
+            <div class="h-full bg-gradient-to-r from-red-500 to-red-400 rounded-full" style="width: 95%"></div>
           </div>
-        </div>
-      </div>
-  
-      <!-- Database Card -->
-      <div class="group relative overflow-hidden rounded-xl bg-gradient-to-br from-black to-gray-900 p-6 border border-gray-800 hover:border-red-500/50 transition-colors
-       duration-300">
-        <div class="absolute inset-0 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-red-900/10 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-        <div class="relative z-10">
-          <div class="flex items-center mb-4 sm:mb-6">
-            <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-red-900/20 flex items-center justify-center mr-3 sm:mr-4 group-hover:bg-gray-200
-             transition-colors">
-              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 sm:h-6 sm:w-6 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4" />
-              </svg>
-            </div>
-            <h3 class="text-xl sm:text-2xl font-semibold text-white">Database</h3>
-          </div>
-          <ul class="space-y-2 sm:space-y-3">
-            <li class="flex items-start">
-              <span class="text-red-500 mr-2 sm:mr-3 mt-1">▹</span>
-              <span class="text-sm sm:text-base text-gray-300 group-hover:text-white transition-colors">PostgreSQL / MySQL</span>
-            </li>
-            <li class="flex items-start">
-              <span class="text-red-500 mr-2 sm:mr-3 mt-1">▹</span>
-              <span class="text-sm sm:text-base text-gray-300 group-hover:text-white transition-colors">MongoDB / NoSQL</span>
-            </li>
-            <li class="flex items-start">
-              <span class="text-red-500 mr-2 sm:mr-3 mt-1">▹</span>
-              <span class="text-sm sm:text-base text-gray-300 group-hover:text-white transition-colors">Firebase / Supabase</span>
-            </li>
-            <li class="flex items-start">
-              <span class="text-red-500 mr-2 sm:mr-3 mt-1">▹</span>
-              <span class="text-sm sm:text-base text-gray-300 group-hover:text-white transition-colors">Data Modeling & Optimization</span>
-            </li>
-            <li class="flex items-start">
-              <span class="text-red-500 mr-2 sm:mr-3 mt-1">▹</span>
-              <span class="text-sm sm:text-base text-gray-300 group-hover:text-white transition-colors">ORMs (Prisma, Mongoose)</span>
-            </li>
-          </ul>
-          <div class="mt-4 sm:mt-6 flex flex-wrap gap-2">
-            <span class="px-2 py-1 sm:px-3 sm:py-1 bg-red-900/20 text-red-400 rounded-full text-xs sm:text-sm">PostgreSQL</span>
-            <span class="px-2 py-1 sm:px-3 sm:py-1 bg-red-900/20 text-red-400 rounded-full text-xs sm:text-sm">MongoDB</span>
-            <span class="px-2 py-1 sm:px-3 sm:py-1 bg-red-900/20 text-red-400 rounded-full text-xs sm:text-sm">Firebase</span>
-          </div>
-        </div>
+        </li>
+      </ul>
+      <div class="mt-4 sm:mt-6 flex flex-wrap gap-2">
+        <span class="px-2 py-1 sm:px-3 sm:py-1 bg-red-900/20 text-red-400 rounded-full text-xs sm:text-sm">React</span>
+        <span class="px-2 py-1 sm:px-3 sm:py-1 bg-red-900/20 text-red-400 rounded-full text-xs sm:text-sm">Next.js</span>
+        <span class="px-2 py-1 sm:px-3 sm:py-1 bg-red-900/20 text-red-400 rounded-full text-xs sm:text-sm">TypeScript</span>
       </div>
     </div>
-  
-    <div class="mt-12 sm:mt-16 max-w-4xl mx-auto">
-      <div class="bg-gradient-to-r from-transparent via-black to-transparent p-px rounded-full">
-        <div class="bg-gray-900 rounded-full p-4 sm:p-6">
-          <h3 class="text-lg sm:text-xl font-semibold text-white text-center mb-3 sm:mb-4">Additional Tools & Technologies</h3>
-          <div class="flex flex-wrap justify-center gap-2 sm:gap-3">
-            <span class="px-3 py-1 sm:px-4 sm:py-2 bg-black/50 text-gray-300 rounded-full border border-gray-800 hover:border-red-500/50 hover:text-white transition-all text-xs sm:text-sm">Git / GitHub</span>
-            <span class="px-3 py-1 sm:px-4 sm:py-2 bg-black/50 text-gray-300 rounded-full border border-gray-800 hover:border-red-500/50 hover:text-white transition-all text-xs sm:text-sm">Docker</span>
-            <span class="px-3 py-1 sm:px-4 sm:py-2 bg-black/50 text-gray-300 rounded-full border border-gray-800 hover:border-red-500/50 hover:text-white transition-all text-xs sm:text-sm">AWS</span>
-            <span class="px-3 py-1 sm:px-4 sm:py-2 bg-black/50 text-gray-300 rounded-full border border-gray-800 hover:border-red-500/50 hover:text-white transition-all text-xs sm:text-sm">Figma</span>
-            <span class="px-3 py-1 sm:px-4 sm:py-2 bg-black/50 text-gray-300 rounded-full border border-gray-800 hover:border-red-500/50 hover:text-white transition-all text-xs sm:text-sm">Jest</span>
-            <span class="px-3 py-1 sm:px-4 sm:py-2 bg-black/50 text-gray-300 rounded-full border border-gray-800 hover:border-red-500/50 hover:text-white transition-all text-xs sm:text-sm">Webpack</span>
-          </div>
+  </div>
+          
+         <!-- Backend Card -->
+<div class="group relative overflow-hidden rounded-xl bg-gradient-to-br from-black to-gray-900 p-6 border border-gray-800 hover:border-red-500/50 transition-all duration-300">
+    <div class="absolute inset-0 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-red-900/10 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+    <div class="relative z-10">
+      <div class="flex items-center mb-4 sm:mb-6">
+        <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-red-900/20 flex items-center justify-center mr-3 sm:mr-4 group-hover:bg-gray-200 transition-colors">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 sm:h-6 sm:w-6 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h14M5 12a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v4a2 2 0 01-2 2M5 12a2 2 0 00-2 2v4a2 2 0 002 2h14a2 2 0 002-2v-4a2 2 0 00-2-2m-2-4h.01M17 16h.01" />
+          </svg>
         </div>
+        <h3 class="text-xl sm:text-2xl font-semibold text-white">Backend</h3>
+      </div>
+      <ul class="space-y-3 sm:space-y-4">
+        <li class="flex flex-col">
+          <div class="flex justify-between items-center mb-1">
+            <div class="flex items-center">
+              <span class="text-red-500 mr-2 sm:mr-3">▹</span>
+              <span class="text-sm sm:text-base text-gray-300 group-hover:text-white transition-colors">Node.js / Express.js</span>
+            </div>
+            <span class="text-xs text-gray-400">85%</span>
+          </div>
+          <div class="w-full h-1.5 bg-gray-800 rounded-full ml-5">
+            <div class="h-full bg-gradient-to-r from-red-500 to-red-400 rounded-full" style="width: 85%"></div>
+          </div>
+        </li>
+        <li class="flex flex-col">
+          <div class="flex justify-between items-center mb-1">
+            <div class="flex items-center">
+              <span class="text-red-500 mr-2 sm:mr-3">▹</span>
+              <span class="text-sm sm:text-base text-gray-300 group-hover:text-white transition-colors">RESTful & GraphQL APIs</span>
+            </div>
+            <span class="text-xs text-gray-400">80%</span>
+          </div>
+          <div class="w-full h-1.5 bg-gray-800 rounded-full ml-5">
+            <div class="h-full bg-gradient-to-r from-red-500 to-red-400 rounded-full" style="width: 80%"></div>
+          </div>
+        </li>
+        <li class="flex flex-col">
+          <div class="flex justify-between items-center mb-1">
+            <div class="flex items-center">
+              <span class="text-red-500 mr-2 sm:mr-3">▹</span>
+              <span class="text-sm sm:text-base text-gray-300 group-hover:text-white transition-colors">Authentication (JWT, OAuth)</span>
+            </div>
+            <span class="text-xs text-gray-400">90%</span>
+          </div>
+          <div class="w-full h-1.5 bg-gray-800 rounded-full ml-5">
+            <div class="h-full bg-gradient-to-r from-red-500 to-red-400 rounded-full" style="width: 90%"></div>
+          </div>
+        </li>
+        <li class="flex flex-col">
+          <div class="flex justify-between items-center mb-1">
+            <div class="flex items-center">
+              <span class="text-red-500 mr-2 sm:mr-3">▹</span>
+              <span class="text-sm sm:text-base text-gray-300 group-hover:text-white transition-colors">Python / Django</span>
+            </div>
+            <span class="text-xs text-gray-400">70%</span>
+          </div>
+          <div class="w-full h-1.5 bg-gray-800 rounded-full ml-5">
+            <div class="h-full bg-gradient-to-r from-red-500 to-red-400 rounded-full" style="width: 70%"></div>
+          </div>
+        </li>
+        <li class="flex flex-col">
+          <div class="flex justify-between items-center mb-1">
+            <div class="flex items-center">
+              <span class="text-red-500 mr-2 sm:mr-3">▹</span>
+              <span class="text-sm sm:text-base text-gray-300 group-hover:text-white transition-colors">Server Deployment & CI/CD</span>
+            </div>
+            <span class="text-xs text-gray-400">75%</span>
+          </div>
+          <div class="w-full h-1.5 bg-gray-800 rounded-full ml-5">
+            <div class="h-full bg-gradient-to-r from-red-500 to-red-400 rounded-full" style="width: 75%"></div>
+          </div>
+        </li>
+      </ul>
+      <div class="mt-4 sm:mt-6 flex flex-wrap gap-2">
+        <span class="px-2 py-1 sm:px-3 sm:py-1 bg-red-900/20 text-red-400 rounded-full text-xs sm:text-sm">Node.js</span>
+        <span class="px-2 py-1 sm:px-3 sm:py-1 bg-red-900/20 text-red-400 rounded-full text-xs sm:text-sm">Express</span>
+        <span class="px-2 py-1 sm:px-3 sm:py-1 bg-red-900/20 text-red-400 rounded-full text-xs sm:text-sm">Python</span>
+      </div>
+    </div>
+  </div>
+  <!-- Database Card -->
+<div class="group relative overflow-hidden rounded-xl bg-gradient-to-br from-black to-gray-900 p-6 border border-gray-800 hover:border-red-500/50 transition-colors duration-300">
+    <div class="absolute inset-0 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-red-900/10 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+    <div class="relative z-10">
+      <div class="flex items-center mb-4 sm:mb-6">
+        <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-red-900/20 flex items-center justify-center mr-3 sm:mr-4 group-hover:bg-gray-200 transition-colors">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 sm:h-6 sm:w-6 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4" />
+          </svg>
+        </div>
+        <h3 class="text-xl sm:text-2xl font-semibold text-white">Database</h3>
+      </div>
+      <ul class="space-y-3 sm:space-y-4">
+        <li class="flex flex-col">
+          <div class="flex justify-between items-center mb-1">
+            <div class="flex items-center">
+              <span class="text-red-500 mr-2 sm:mr-3">▹</span>
+              <span class="text-sm sm:text-base text-gray-300 group-hover:text-white transition-colors">PostgreSQL / MySQL</span>
+            </div>
+            <span class="text-xs text-gray-400">85%</span>
+          </div>
+          <div class="w-full h-1.5 bg-gray-800 rounded-full ml-5">
+            <div class="h-full bg-gradient-to-r from-red-500 to-red-400 rounded-full" style="width: 85%"></div>
+          </div>
+        </li>
+        <li class="flex flex-col">
+          <div class="flex justify-between items-center mb-1">
+            <div class="flex items-center">
+              <span class="text-red-500 mr-2 sm:mr-3">▹</span>
+              <span class="text-sm sm:text-base text-gray-300 group-hover:text-white transition-colors">MongoDB / NoSQL</span>
+            </div>
+            <span class="text-xs text-gray-400">75%</span>
+          </div>
+          <div class="w-full h-1.5 bg-gray-800 rounded-full ml-5">
+            <div class="h-full bg-gradient-to-r from-red-500 to-red-400 rounded-full" style="width: 75%"></div>
+          </div>
+        </li>
+        <li class="flex flex-col">
+          <div class="flex justify-between items-center mb-1">
+            <div class="flex items-center">
+              <span class="text-red-500 mr-2 sm:mr-3">▹</span>
+              <span class="text-sm sm:text-base text-gray-300 group-hover:text-white transition-colors">Firebase / Supabase</span>
+            </div>
+            <span class="text-xs text-gray-400">70%</span>
+          </div>
+          <div class="w-full h-1.5 bg-gray-800 rounded-full ml-5">
+            <div class="h-full bg-gradient-to-r from-red-500 to-red-400 rounded-full" style="width: 70%"></div>
+          </div>
+        </li>
+        <li class="flex flex-col">
+          <div class="flex justify-between items-center mb-1">
+            <div class="flex items-center">
+              <span class="text-red-500 mr-2 sm:mr-3">▹</span>
+              <span class="text-sm sm:text-base text-gray-300 group-hover:text-white transition-colors">Data Modeling & Optimization</span>
+            </div>
+            <span class="text-xs text-gray-400">80%</span>
+          </div>
+          <div class="w-full h-1.5 bg-gray-800 rounded-full ml-5">
+            <div class="h-full bg-gradient-to-r from-red-500 to-red-400 rounded-full" style="width: 80%"></div>
+          </div>
+        </li>
+        <li class="flex flex-col">
+          <div class="flex justify-between items-center mb-1">
+            <div class="flex items-center">
+              <span class="text-red-500 mr-2 sm:mr-3">▹</span>
+              <span class="text-sm sm:text-base text-gray-300 group-hover:text-white transition-colors">ORMs (Prisma, Mongoose)</span>
+            </div>
+            <span class="text-xs text-gray-400">75%</span>
+          </div>
+          <div class="w-full h-1.5 bg-gray-800 rounded-full ml-5">
+            <div class="h-full bg-gradient-to-r from-red-500 to-red-400 rounded-full" style="width: 75%"></div>
+          </div>
+        </li>
+      </ul>
+      <div class="mt-4 sm:mt-6 flex flex-wrap gap-2">
+        <span class="px-2 py-1 sm:px-3 sm:py-1 bg-red-900/20 text-red-400 rounded-full text-xs sm:text-sm">PostgreSQL</span>
+        <span class="px-2 py-1 sm:px-3 sm:py-1 bg-red-900/20 text-red-400 rounded-full text-xs sm:text-sm">MongoDB</span>
+        <span class="px-2 py-1 sm:px-3 sm:py-1 bg-red-900/20 text-red-400 rounded-full text-xs sm:text-sm">Firebase</span>
+      </div>
+    </div>
+  </div>
+        <!-- Close the previous cards grid -->
       </div>
     </div>
   </section>
+
+  <!-- Fix: Add proper closure for the Additional Tools section -->
+  <div class="mt-12 sm:mt-16 max-w-4xl mx-auto fade-slide slide-right">
+    <div class="bg-gradient-to-r from-transparent via-black to-transparent p-px rounded-full">
+      <div class="bg-gray-900 rounded-full p-4 sm:p-6">
+        <h3 class="text-lg sm:text-xl font-semibold text-white text-center mb-3 sm:mb-4">Additional Tools & Technologies</h3>
+        <div class="flex flex-wrap justify-center gap-2 sm:gap-3 fade-slide slide-diagonal-reverse">
+          <span class="px-3 py-1 sm:px-4 sm:py-2 bg-black/50 text-gray-300 rounded-full border border-gray-800 hover:border-red-500/50 hover:text-white transition-all text-xs sm:text-sm">Git / GitHub</span>
+          <span class="px-3 py-1 sm:px-4 sm:py-2 bg-black/50 text-gray-300 rounded-full border border-gray-800 hover:border-red-500/50 hover:text-white transition-all text-xs sm:text-sm">Docker</span>
+          <span class="px-3 py-1 sm:px-4 sm:py-2 bg-black/50 text-gray-300 rounded-full border border-gray-800 hover:border-red-500/50 hover:text-white transition-all text-xs sm:text-sm">AWS</span>
+          <span class="px-3 py-1 sm:px-4 sm:py-2 bg-black/50 text-gray-300 rounded-full border border-gray-800 hover:border-red-500/50 hover:text-white transition-all text-xs sm:text-sm">Figma</span>
+          <span class="px-3 py-1 sm:px-4 sm:py-2 bg-black/50 text-gray-300 rounded-full border border-gray-800 hover:border-red-500/50 hover:text-white transition-all text-xs sm:text-sm">Jest</span>
+          <span class="px-3 py-1 sm:px-4 sm:py-2 bg-black/50 text-gray-300 rounded-full border border-gray-800 hover:border-red-500/50 hover:text-white transition-all text-xs sm:text-sm">Webpack</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<!-- End Skills Section -->
+  
+  </section>
+  
             
-  <section id="projects" class="py-12 md:py-16 bg-black-red
+  <section id="projects" class="py-12 md:py-16 bg-black-red fade-slide slide-up
   ">
     <div class="container mx-auto px-4 sm:px-6">
       <div class="relative max-w-md mx-auto text-center mb-8 md:mb-12">
@@ -337,7 +490,7 @@
           <span class="block sm:absolute mt-2 sm:mt-3 left-0 w-full h-1 bg-gradient-to-r from-transparent via-black to-transparent"></span>
         </h2>
       </div>
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 ">
         <!-- Project 1 -->
         <div class="bg-gray-800 
         rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-shadow">
@@ -370,7 +523,7 @@
     </div>
   </section>
 
-<section id="contact" class="py-12 md:py-20 bg-gradient-to-b from-black to-gray-900">
+<section id="contact" class="py-12 md:py-20 bg-gradient-to-b from-black to-gray-900 fade-slide slide-right">
     <div class="container mx-auto px-4 sm:px-6 max-w-6xl">
       <div class="relative max-w-md mx-auto text-center mb-12 md:mb-16">
         <h2 class="text-2xl sm:text-3xl font-bold text-gray-300 inline-block relative">
@@ -413,7 +566,7 @@
         </div>
   
         <!-- Contact Info -->
-        <div class="space-y-6 md:space-y-8">
+        <div class="space-y-6 md:space-y-8 fade-slide slide-right">
           <div class="flex items-start space-x-4 sm:space-x-6">
             <div class="flex-shrink-0 bg-red-900/20 p-2 sm:p-3 rounded-full">
               <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 sm:h-6 sm:w-6 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -443,7 +596,7 @@
         </div>
 
         <div class="flex items-start space-x-6">
-          <div class="flex-shrink-0 bg-red-900/20 p-3 rounded-full">
+          <div class="flex-shrink-0 bg-red-900/20 p-3 rounded-full fade-slide slide-right">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8h2a2 2 0 012 2v6a2 2 0 01-2 2h-2v4l-4-4H9a1.994 1.994 0 01-1.414-.586m0 0L11 14h4a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2v4l.586-.586z" />
             </svg>
@@ -481,7 +634,7 @@
 <!-- Footer -->
 <footer class=" bg-gradient-to-r from-red-600
 to-black rounded-lg 
- py-12 border-t border-gray-800">
+ py-12 border-t border-gray-800 fade-slide slide-right">
   <div class="container mx-auto px-6">
     <div class="max-w-4xl mx-auto">
       <!-- Footer Content -->
@@ -498,9 +651,9 @@ to-black rounded-lg
         </div>
         
         <!-- Social Media -->
-        <div class="text-center">
+        <div class="text-center ">
           <h3 class="text-lg font-semibold text-white mb-4">Connect With Me</h3>
-          <div class="flex justify-center md:justify-start space-x-4">
+          <div class="flex justify-center md:justify-start space-x-4 fade-slide slide-right">
             <a href="#" class="bg-gray-200
             hover:bg-red-900/50 p-3 rounded-full transition-colors duration-300">
               <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="currentColor" viewBox="0 0 24 24">
@@ -529,7 +682,7 @@ to-black rounded-lg
         </div>
         
         <!-- Newsletter -->
-        <div class="text-center md:text-right">
+        <div class="text-center md:text-right fade-slide slide-right">
           <h3 class="text-lg font-semibold text-white mb-4">Stay Updated</h3>
           <form class="flex flex-col space-y-3">
             <input type="email" placeholder="Your email" class="px-4 py-2 bg-gray-800 border border-gray-700 rounded text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-red-500">
@@ -556,14 +709,35 @@ to-black rounded-lg
     </div>
   </div>
 </footer>
-<script>
-  function toggleSidebar() {
-    document.getElementById('mobile-sidebar').classList.toggle('open');
-    document.getElementById('overlay').classList.toggle('active');
-  }
-  
-  // Close sidebar when clicking overlay
-  document.getElementById('overlay').addEventListener('click', toggleSidebar);
+
+
+  <script>
+    function toggleSidebar() {
+      document.getElementById('mobile-sidebar').classList.toggle('open');
+      document.getElementById('overlay').classList.toggle('active');
+      document.body.classList.toggle('overflow-hidden');
+    }
+    
+    // Close sidebar when clicking overlay
+    document.getElementById('overlay').addEventListener('click', toggleSidebar);
+    
+    // Close sidebar when clicking on a link (for mobile)
+    document.querySelectorAll('#mobile-sidebar a').forEach(link => {
+      link.addEventListener('click', toggleSidebar);
+    });
+  const sections = document.querySelectorAll('.fade-slide');
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+      }
+    });
+  }, {
+    threshold: 0.2 // Trigger when 20% of element is visible
+  });
+
+  sections.forEach(section => observer.observe(section));
 </script>
 </body>
 </html>
